@@ -21,6 +21,8 @@ spring:
             issuer-uri: ${SECURITY_OAUTH2_EXPECTED_ISSUER:http://localhost:7080/auth/realms/portfolio}
   cloud:
     gateway:
+      cors:
+        allowed-origins: ${GATEWAY_ALLOWED_ORIGINS:http://localhost:8087}
       default-filters:
         - TokenRelay
         - SaveSession
