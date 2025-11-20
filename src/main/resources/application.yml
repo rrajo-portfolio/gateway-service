@@ -18,11 +18,13 @@ spring:
             authorization-grant-type: client_credentials
         provider:
           keycloak:
-            issuer-uri: ${SECURITY_OAUTH2_EXPECTED_ISSUER:http://localhost:7080/auth/realms/portfolio}
+            token-uri: ${GATEWAY_KEYCLOAK_INTERNAL_ISSUER:http://keycloak:8080/auth/realms/portfolio}/protocol/openid-connect/token
+            authorization-uri: ${GATEWAY_KEYCLOAK_INTERNAL_ISSUER:http://keycloak:8080/auth/realms/portfolio}/protocol/openid-connect/auth
+            jwk-set-uri: ${GATEWAY_KEYCLOAK_INTERNAL_ISSUER:http://keycloak:8080/auth/realms/portfolio}/protocol/openid-connect/certs
   cloud:
     gateway:
       cors:
-        allowed-origins: ${GATEWAY_ALLOWED_ORIGINS:http://localhost:8087}
+        allowed-origins: ${GATEWAY_ALLOWED_ORIGINS:http://localhost:8087,http://host.docker.internal:18081}
       default-filters:
         - TokenRelay
         - SaveSession
@@ -34,21 +36,20 @@ spring:
         - id: catalog
           uri: ${GATEWAY_CATALOG_URI:http://catalog-service:8081}
           predicates:
-            - Path=/catalog/**
+            - Path=/api/catalog,/api/catalog/**
           filters:
-            - StripPrefix=1
+            - name: RewritePath
+              args:
+                regexp: /api/catalog(?<segment>/?.*)
+                replacement: /api${segment}
         - id: users
           uri: ${GATEWAY_USERS_URI:http://users-service:8082}
           predicates:
-            - Path=/users/**
-          filters:
-            - StripPrefix=1
+            - Path=/api/users,/api/users/**
         - id: orders
           uri: ${GATEWAY_ORDERS_URI:http://orders-service:8084}
           predicates:
-            - Path=/orders/**
-          filters:
-            - StripPrefix=1
+            - Path=/api/orders,/api/orders/**
 
 management:
   endpoints:
