@@ -24,7 +24,7 @@ spring:
   cloud:
     gateway:
       cors:
-        allowed-origins: ${GATEWAY_ALLOWED_ORIGINS:http://localhost:8087,http://host.docker.internal:18081}
+        allowed-origins: ${GATEWAY_ALLOWED_ORIGINS:http://localhost:4200,http://localhost:8087,http://host.docker.internal:18081}
       default-filters:
         - TokenRelay
         - SaveSession
