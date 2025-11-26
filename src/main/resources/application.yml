@@ -50,6 +50,10 @@ spring:
           uri: ${GATEWAY_ORDERS_URI:http://orders-service:8084}
           predicates:
             - Path=/api/orders,/api/orders/**
+        - id: keycloak
+          uri: ${GATEWAY_KEYCLOAK_URI:http://keycloak:8080}
+          predicates:
+            - Path=/auth/**,/login-actions/**,/realms/**,/resources/**
 
 management:
   endpoints:
