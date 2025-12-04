@@ -53,7 +53,7 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource(
-        @Value("${gateway.cors.allowed-origins:http://localhost:8087}") String allowedOrigins
+        @Value("${gateway.cors.allowed-origins:http://localhost:8087,http://localhost:8080,http://localhost:8085}") String allowedOrigins
     ) {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(

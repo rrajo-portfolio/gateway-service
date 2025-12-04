@@ -54,12 +54,22 @@ spring:
           uri: ${GATEWAY_KEYCLOAK_URI:http://keycloak:8080}
           predicates:
             - Path=/auth/**,/login-actions/**,/realms/**,/resources/**
+        - id: notifications
+          uri: ${GATEWAY_NOTIFICATIONS_URI:http://notification-service:8080}
+          predicates:
+            - Path=/api/notifications,/api/notifications/**
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info,prometheus
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
   endpoint:
     health:
       probes:
